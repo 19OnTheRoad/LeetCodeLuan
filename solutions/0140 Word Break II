@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> dict(wordDict.begin(), wordDict.end());
+        unordered_map<string, vector<string>> ump;
+        return helper(s, dict, ump);
+    }
+    vector<string> helper(string s, unordered_set<string> &dict, unordered_map<string, vector<string>> &ump){
+        if(ump.count(s)) return ump[s];
+        vector<string> res;
+        if(dict.count(s)) res.push_back(s);
+        int n = s.size();
+        for(int i=1; i<n; i++){
+            string lStr = s.substr(0, i), rStr = s.substr(i);
+            if(dict.count(rStr)){
+                vector<string> tempRes = helper(lStr, dict, ump);
+                for(string s: tempRes){
+                    s += " " + rStr;
+                    res.push_back(s);
+                }
+            }
+        }
+        return ump[s] = res;
+    }
+};
