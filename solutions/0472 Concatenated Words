@@ -56,10 +56,11 @@ public:
         return res;
     }
     bool sInTrie(string &s, int i,  TrieNode *p, TrieNode *root){
-        if(i==s.size()) return p->word != "" && p->word != s;
+        if(i==s.size()) return p->word != "" && p->word != s;           //return true, if we reach a word at the end & the original word s is a concatenated word
+                                                                        // if p->word == s: p->word is a word, not a concatenated word.
         if(!p->next[s[i]-'a']) return false;
         p = p->next[s[i]-'a'];
-        if(p->word != "" && sInTrie(s, i+1, root, root)) return true;
+        if(p->word != "" && sInTrie(s, i+1, root, root)) return true;   //reached a word, try to start from root again
         return sInTrie(s, i+1, p, root);
     }
 };
