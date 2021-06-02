@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        int maxSum = INT_MIN;
+        rootPathSum(root, maxSum);
+        return maxSum;
+    }
+    int rootPathSum(TreeNode *root, int &maxSum){       // maxSum: update global sum: maxSum.
+                                                        // rootPathSum: return root and one l/r path sum.      it's subtle.
+        if(!root) return 0;
+        int l = rootPathSum(root->left, maxSum);
+        int r = rootPathSum(root->right, maxSum);
+        if(l<0) l=0;
+        if(r<0) r = 0;
+        maxSum = max(maxSum, root->val + l + r);
+        return root->val + max(l, r);
+    }
+};
