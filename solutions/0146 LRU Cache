@@ -1,0 +1,30 @@
+class LRUCache {
+public:
+    int size;
+    list<pair<int, int>> lst;                                  // double-linked list.
+    unordered_map<int, list<pair<int, int>>::iterator> ump;
+    LRUCache(int capacity) {
+        size = capacity;
+    }
+    
+    int get(int key) {
+        if(!ump.count(key)) return -1;
+        lst.splice(lst.begin(), lst, ump[key]);                 // splice here takes the element at th ump[key] and place it at the beginning of the list.
+        return ump[key]->second;
+    }
+    
+    void put(int key, int value) {
+        if(ump.count(key)){
+            lst.splice(lst.begin(), lst, ump[key]);
+            ump[key]->second =value;
+            return ;
+        }
+        if(lst.size() == size){
+            int deleteKey = lst.back().first;
+            lst.pop_back();
+            ump.erase(deleteKey);
+        }
+        lst.push_front({key, value});
+        ump[key] = lst.begin();
+    }
+};
