@@ -1,0 +1,19 @@
+class Solution {
+public:
+    string countAndSay(int n) {
+        string res = "1";
+        for(int i=2; i<=n; i++){
+            string tempRes;
+            int m = res.size();
+            for(int j=0; j<m; ){
+                int k=j;
+                while(k+1<m && res[k] == res[k+1]) k++;
+                tempRes += to_string(k-j+1);
+                tempRes += res[k];
+                j = k + 1;
+            }
+            res = tempRes;
+        }
+        return res;
+    }
+};
