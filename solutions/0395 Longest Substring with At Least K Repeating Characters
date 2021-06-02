@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int longestSubstring(string s, int k) {
+        int maxLen = 0;
+        for(int i=1; i<=26; i++){
+            maxLen = max(maxLen, helper(s, k, i));
+        }
+        return maxLen;
+    }
+    int helper(string s, int k, int numKTarget){
+        int n = s.size(), num1=0, numK=0, maxLen = 0;
+        vector<int> count(26, 0);
+        for(int start=0, end=0; end<n; ){
+            if(count[s[end]-'a']==0) num1++;
+            count[s[end]-'a']++;
+            if(count[s[end]-'a']==k) numK++;
+            end++;
+            while(num1>numKTarget){
+                if(count[s[start]-'a']==k) numK--;
+                count[s[start]-'a']--;
+                if(count[s[start]-'a']==0) num1--;
+                start++;
+            }
+            if(num1==numK && numK==numKTarget){
+                maxLen = max(maxLen, end-start);
+            }
+        }
+        return maxLen;
+    }
+};
