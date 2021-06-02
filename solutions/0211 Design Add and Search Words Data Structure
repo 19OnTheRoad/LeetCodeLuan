@@ -1,0 +1,39 @@
+class WordDictionary {
+public:
+    /** Initialize your data structure here. */
+    struct TrieNode{
+        vector<TrieNode*> next = vector<TrieNode*>(26, NULL);
+        bool isWord = false;
+    };
+    TrieNode *root = new TrieNode();
+    WordDictionary() {}
+    
+    void addWord(string word) {
+        TrieNode * p = root;
+        for(char c: word){
+            int i = c - 'a';
+            if(!p->next[i]) p->next[i] = new TrieNode();
+            p = p->next[i];
+        }
+        p->isWord = true;
+    }
+    
+    bool search(string word) {
+        return find(word, root);
+    }
+    bool find(string s, TrieNode *node){
+        TrieNode *p = node;
+        int n = s.size();
+        for(int i=0; i<n && p; i++){
+            if(s[i] != '.') p = p->next[s[i]-'a'];
+            else{
+                TrieNode *temp = p;
+                for(int j=0; j<26; j++){
+                    p = temp->next[j];
+                    if(find(s.substr(i+1), p)) return true;
+                }
+            }
+        }
+        return p && p->isWord;
+    }
+};
