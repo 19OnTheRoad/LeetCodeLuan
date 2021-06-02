@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        dfs(res, "", n, n);
+        return res;
+    }
+    void dfs(vector<string> &res, string path, int leftNum, int rightNum){    // leftNum: remain num of '('.
+        if(rightNum==0){
+            res.push_back(path);
+            return ;
+        }
+        if(0<leftNum) dfs(res, path+"(", leftNum-1, rightNum);
+        if(leftNum<rightNum) dfs(res, path+")", leftNum, rightNum-1);
+    }
+};
