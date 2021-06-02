@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int sum = 0, n = nums.size();
+        for(int num: nums) sum += num;
+        if(k==0 || sum%k !=0) return false;
+        vector<bool> visited(n, false);
+        return helper(nums, visited, k, 0, sum/k, 0);
+    }
+    bool helper(vector<int> &nums, vector<bool> &visited, int k, int curSum, int targetSum, int start){
+        if(k==0) return true;
+        if(curSum==targetSum) return helper(nums, visited, k-1, 0, targetSum, 0);
+        for(int i =start; i<nums.size() && nums[i]+curSum<=targetSum; i++){
+            if(!visited[i]){
+                visited[i] = true;
+                if(helper(nums, visited, k, curSum+nums[i], targetSum, i+1)) return true;
+                visited[i] = false;
+            }
+        }
+        return false;
+    }
+};
+
