@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int change(int target, vector<int>& nums) {
+        vector<int> dp(target+1, 0);
+        dp[0] = 1;
+        for(int num: nums){
+            for(int i=num; i<=target; i++){
+                dp[i] += dp[i-num];
+            }
+        }
+        return dp[target];
+    }
+};
