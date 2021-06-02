@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<int> findOrder(int n, vector<vector<int>>& pres) {
+        vector<vector<int>> res(n, vector<int>());
+        vector<int> degrees(n, 0);
+        for(auto p: pres){
+            res[p[1]].push_back(p[0]);
+            degrees[p[0]]++;
+        }
+        queue<int> que;
+        vector<int> result;
+        for(int i=0; i<n; i++){
+            if(degrees[i]==0) {
+                que.push(i);
+                result.push_back(i);
+            }
+        }
+        while(!que.empty()){
+            int cur = que.front();
+            que.pop();
+            n--;
+            for(int next: res[cur]){
+                degrees[next]--;
+                if(degrees[next]==0) {
+                    que.push(next);
+                    result.push_back(next);
+                }
+            }
+        }
+        return n==0 ? result : vector<int>();
+    }
+};
