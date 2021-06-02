@@ -1,0 +1,37 @@
+// return the number of all Palindromic Substrings.
+
+// method 1: DP
+class Solution {
+public:
+    int countSubstrings(string s) {
+        int n = s.size(), count = 0;
+        vector<vector<bool>> dp(n, vector<bool>(n, false));   // bool dp[n][n];  it will set false by default.
+        for(int i = n-1; i>=0; i--){
+            for(int j=i; j<n; j++){
+                dp[i][j] = s[i]==s[j] && (j-i<3 || dp[i+1][j-1]);
+                if(dp[i][j]) count++;
+            }
+        }
+        return count;
+    }
+};
+
+// method 2: extendPalindrome.
+// time: O(n^2).
+class Solution {
+public:
+    int countSubstrings(string s) {
+        int n = s.size(), count = 0;
+        for(int i = 0; i<n; i++){
+            extendPalindrome(s, i, i, n, count);
+            extendPalindrome(s, i, i+1, n, count);
+        }
+        return count;
+    }
+    void extendPalindrome(string& s, int i, int j, int &n, int &count){
+        while(0<=i && j<n && s[i]==s[j]){
+            i--, j++;
+            count++;
+        }
+    }
+};
