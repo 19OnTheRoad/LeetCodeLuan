@@ -1,0 +1,76 @@
+// method 1: trie.
+// time: O(m*n*wLen*4^wLen).    // K = words.size(), wLen: average len of words.
+class Solution {
+public:
+    struct TrieNode{
+        vector<TrieNode*> next = vector<TrieNode*>(26, NULL);
+        string word = "";
+    };
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        TrieNode *root = new TrieNode();
+        for(string w: words){
+            TrieNode *p = root;
+            for(char c: w){
+                int i= c - 'a';
+                if(!p->next[i]) p->next[i] = new TrieNode();
+                p = p->next[i];
+            }
+            p->word = w;
+        }
+        int m = board.size(), n = board[0].size();
+        vector<string> res;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                dfs(board, m, n, i, j, res, root); 
+            }
+        }
+        return res;
+    }
+    void dfs(vector<vector<char>> &board, int &m, int &n, int i, int j, vector<string> &res, TrieNode *p){
+        char c = board[i][j];
+        if(c=='*' || !p->next[c-'a']) return ;
+        p = p->next[c-'a'];
+        if(p->word!=""){
+            res.push_back(p->word);
+            p->word = "";
+        }
+        board[i][j] = '*';
+        if(0<=i-1) dfs(board, m, n, i-1, j, res, p);
+        if(i+1<m)  dfs(board, m, n, i+1, j, res, p);
+        if(0<=j-1) dfs(board, m, n, i, j-1, res, p);
+        if(j+1<n)  dfs(board, m, n, i, j+1, res, p);
+        board[i][j] =c ;
+    }
+};
+
+// method 2: brute force.
+// time: O(m*n*K*4^wLen).    // K = words.size(), wLen: average len of words.
+// it shows that now: Time Limit Exceeded.
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        vector<string> res;
+        int m=board.size(), n=board[0].size(), len=words.size();
+        for(int k=0; k<len; k++)
+            for(int i=0; i<m; i++)
+                for(int j=0; j<n; j++)
+                    if(dfs(board,words,m,n,k,i,j,0)){
+                        i=m,j=n;
+                        res.push_back(words[k]);
+                    }
+        return res;
+    }
+    bool dfs(vector<vector<char>>& board, vector<string>& words, int m, int n, int k, int i, int j, int l){
+        if(board[i][j]!=words[k][l]) return false;
+        if(l==words[k].size()-1) return true;
+        char c=board[i][j];
+        board[i][j]='*';
+        bool res=false;
+        if(i>0) res=dfs(board,words,m,n,k,i-1,j,l+1);
+        if(!res && i+1<m) res=dfs(board,words,m,n,k,i+1,j,l+1);
+        if(!res && j>0) res=dfs(board,words,m,n,k,i,j-1,l+1);
+        if(!res && j+1<n) res=dfs(board,words,m,n,k,i,j+1,l+1);
+        board[i][j]=c;
+        return res;
+    }
+};
