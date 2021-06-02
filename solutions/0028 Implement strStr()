@@ -5,13 +5,17 @@ public:
     int strStr(string s, string p) {
         int m = s.size(), n = p.size();
         if(n==0) return 0;
-        vector<int> lps(n, 0);
+        vector<int> lps(n, 0);                // lps[i]: longest prefix and suffix in p[0, i] except itself.
+        
+        // kmpProgress: 1. calculate the lps. 
         for(int j=0, i=1; i<n; ){
             if(p[i] == p[j]) lps[i++] = ++j;
             else{
                 j>0 ? j = lps[j-1] : i++;
             }
         }
+        
+        // kmpProgress: 2. match s with lps.
         for(int i=0, j=0; i<m; ){
             if(s[i] == p[j]) {
                 i++, j++;
@@ -20,6 +24,14 @@ public:
                 j>0 ? j = lps[j-1] : i++;
             }
         }
+        
+        // skip the characters which will match anyway by using lps.
+        // when p[j]!=s[i], we know:
+        // 1. p[0, j-1] matches s[i-j, i-1]. 
+        // 2. lps[j-1] is the maxLen of both prefix and suffix of p[0, j-1] except itself.
+        // so we know lps[j-1] is the maxLen of both prefix and suffix of p[0, j-1] == s[i-j, j-1].
+        // so p[0, lsp[j-1]) will matches s[i-lps[j-1], i-1], ==>: therefore, we just set j = lps[j-1].
+
         return -1;
     }
 };
