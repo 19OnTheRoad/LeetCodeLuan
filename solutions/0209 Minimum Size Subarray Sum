@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int n = nums.size(), sum = 0, minLen = INT_MAX;
+        for(int start=0, end=0; end<n; ){
+            sum += nums[end];
+            end++;
+            while(sum>=target){
+                minLen = min(minLen, end-start);
+                sum -= nums[start];
+                start++;
+            }
+        }
+        return minLen == INT_MAX ? 0 : minLen;
+    }
+};
