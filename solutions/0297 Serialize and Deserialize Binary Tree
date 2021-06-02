@@ -1,0 +1,23 @@
+class Codec {
+public:
+    string serialize(TreeNode* root) {
+        if(!root) return "#";
+        return to_string(root->val) + "," + serialize(root->left) + "," + serialize(root->right);
+    }
+    TreeNode* deserialize(string data) {
+        return myDes(data);
+    }
+    TreeNode* myDes(string& data){
+        if(data[0] == '#'){
+            if(data.size() > 1) data = data.substr(2);
+            return NULL;
+        }
+        int pos = data.find(',');
+        int rootVal = stoi(data.substr(0, pos));
+        data = data.substr(pos + 1);
+        TreeNode * root = new TreeNode(rootVal);
+        root->left = myDes(data);
+        root->right = myDes(data);
+        return root;
+    }
+};
