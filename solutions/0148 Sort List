@@ -1,0 +1,83 @@
+// mergeSort 
+
+// 1. space: O(1)
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head->next) return head;
+        ListNode *cur = head;
+        int n = 0;
+        while(cur){
+            cur = cur->next;
+            n++;
+        }
+        ListNode *left, *right, *dummy = new ListNode(-1), *tail;
+        dummy->next = head;
+        for(int i=1; i<n; i *= 2){
+            tail = dummy;
+            cur = dummy->next;
+            while(cur){
+                left = cur;
+                right = nNodesNext(left, i);
+                cur = nNodesNext(right, i);
+                tail = merge(left, right, tail);
+            }
+        }
+        return dummy->next;
+    }
+    ListNode* nNodesNext(ListNode* head, int n){
+        for(int i=1; i<n && head; i++){
+            head  = head->next;
+        }
+        if(!head) return NULL;
+        ListNode *newHead =  head->next;
+        head->next= NULL;
+        return newHead;
+    }
+    ListNode *merge(ListNode *l1, ListNode *l2, ListNode *tail){
+        ListNode *cur= tail;
+        while(l1 && l2){
+            if(l1->val < l2->val){
+                cur->next = l1;
+                l1 = l1->next;
+            }else{
+                cur->next = l2;
+                l2 = l2->next;
+            }
+            cur = cur->next;
+        }
+        cur->next = l1 ? l1 : l2;
+        while(cur->next) cur = cur->next;
+        return cur;
+    }
+};
+
+// 2. space: O(nlogn)
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head->next) return head;
+        ListNode *slow = head, *fast = head->next;  // in order to avoid two nodes case.
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        fast = slow->next;
+        slow->next = NULL;
+        ListNode *l1 = sortList(head), *l2 = sortList(fast);
+        ListNode *newHead = new ListNode(-1), *cur = newHead;
+        while(l1 && l2){
+            if(l1->val <= l2->val){
+                cur->next = l1;
+                l1 = l1->next;
+            }else{
+                cur->next = l2;
+                l2 = l2->next;
+            }
+            cur = cur->next;
+        }
+        if(l1) cur->next = l1;
+        else cur->next = l2;
+        return newHead->next;
+    }
+};
