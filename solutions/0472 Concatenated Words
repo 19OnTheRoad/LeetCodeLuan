@@ -1,0 +1,65 @@
+// method 1: dp.
+class Solution {
+public:
+    static bool cmp(string &a, string &b){
+        return a.size()<b.size();
+    }
+    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+        sort(words.begin(), words.end(), cmp);
+        unordered_set<string> dict;
+        vector<string> res;
+        for(string w: words){
+            if(canBreak(w, dict)) res.push_back(w);
+            dict.insert(w);
+        }
+        return res;
+    }
+    bool canBreak(string s, unordered_set<string> &dict){
+        int n = s.size();
+        if(n==0) return false;
+        vector<bool> dp(n+1, false);
+        dp[0] = true;
+        for(int j=1; j<=n; j++){
+            for(int i=0; i<j; i++){
+                if(dp[i] && dict.count(s.substr(i, j-i))){
+                    dp[j] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+};
+
+// method 2: trie.
+class Solution {
+public:
+    struct TrieNode{
+        vector<TrieNode*> next = vector<TrieNode*>(26, NULL);
+        string word = "";
+    };
+    vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
+        TrieNode *root = new TrieNode();
+        for(string s: words){
+            TrieNode *p = root;
+            for(char c: s){
+                int i = c - 'a';
+                if(!p->next[i]) p->next[i] = new TrieNode();
+                p = p->next[i];
+            }
+            p->word = s;
+        }
+        vector<string> res;
+        for(string s: words){
+            if(sInTrie(s, 0, root, root)) res.push_back(s);
+        }
+        return res;
+    }
+    bool sInTrie(string &s, int i,  TrieNode *p, TrieNode *root){
+        if(i==s.size()) return p->word != "" && p->word != s;
+        if(!p->next[s[i]-'a']) return false;
+        p = p->next[s[i]-'a'];
+        if(p->word != "" && sInTrie(s, i+1, root, root)) return true;
+        return sInTrie(s, i+1, p, root);
+    }
+};
