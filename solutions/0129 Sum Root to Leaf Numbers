@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int sumNumbers(TreeNode* root) {
+        return helper(root, 0);
+    }
+    int helper(TreeNode *root, int sum){
+        if(!root) return sum;
+        sum = sum*10 + root->val;
+        TreeNode *l = root->left, *r = root->right;
+        if(!l && !r) return sum;
+        if(l && !r) return helper(l, sum);
+        if(!l && r) return helper(r, sum);                   // must do this to make sure: leaf node: no l/r child.
+        return helper(l, sum) + helper(r, sum);
+    }
+};
