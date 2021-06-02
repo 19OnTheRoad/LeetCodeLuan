@@ -1,0 +1,68 @@
+// method 1: iterative inorder traversal.
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        stack<TreeNode*> stk;
+        TreeNode *cur = root, *preCur = NULL, *first = NULL, *second = NULL;
+        while(cur || !stk.empty()){
+            if(cur){
+                stk.push(cur);
+                cur = cur->left;
+            }else{
+                cur = stk.top();
+                stk.pop();
+                if(preCur && preCur->val > cur->val){
+                    if(!first) first = preCur;
+                    second = cur;
+                }
+                preCur = cur;
+                cur = cur->right;
+            }
+        }
+        if(first && second){
+            int temp = first->val;
+            first->val  = second->val;
+            second->val = temp;
+        }
+    }
+};
+
+// method 2:  morrirs inorder traversal.
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        TreeNode *first=NULL, *second=NULL, *cur=root, *preCur=NULL;
+        while(cur){
+            if(!cur->left){
+                if(preCur && preCur->val > cur->val){
+                    if(!first) first = preCur;
+                    second = cur;
+                }
+                preCur = cur;
+                cur = cur->right;
+            }else{
+                TreeNode *pre=cur->left;
+                while(pre->right && pre->right!=cur)
+                    pre = pre->right;
+                if(!pre->right){
+                    pre->right = cur;
+                    cur = cur->left;
+                }else{
+                    if(preCur && preCur->val > cur->val){
+                        if(!first) first = preCur;
+                        second = cur;
+                    }
+                    preCur = cur;
+                    cur = cur->right;
+                    pre->right = NULL;
+                }
+            }
+        }
+        if(first && second){
+            int temp = first->val;
+            first->val = second->val;
+            second->val = temp;
+        }
+        return ;
+    }
+};
