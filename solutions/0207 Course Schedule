@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool canFinish(int n, vector<vector<int>>& pres) {  // n: numCourse
+        vector<vector<int>> res(n, vector<int>());      // res[i]: the courses which take course i first.
+        vector<int> degrees(n, 0);  // degrees[i]: how many courses must take before take course i.
+        queue<int> que;             // those courses which need no pre courses.
+        for(auto v: pres){          // v[0]: result course, v[1]: pre course.
+            res[v[1]].push_back(v[0]);
+            degrees[v[0]]++;
+        }
+        for(int i=0; i<n; i++){
+            if(degrees[i]==0) que.push(i);
+        }
+        while(!que.empty()){
+            int cur = que.front();  // cur: curCourse.
+            que.pop();
+            n--;       // n: numCourse
+            for(int next: res[cur]){       // next: result courses
+                degrees[next]--;
+                if(degrees[next]==0) que.push(next);
+            }
+        }
+        return n==0;
+    }
+};
