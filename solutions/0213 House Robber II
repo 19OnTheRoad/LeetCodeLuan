@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+        if(n==1) return nums[0];
+        if(n==2) return max(nums[0], nums[1]);
+        return max(helper(nums, 0, n-2), helper(nums, 1, n-1));    // two cases to transfer circle to array.
+                                                                   // 1. don't use nums[0].
+                                                                   // 2. don't use nums[n-1].
+    }
+    int helper(vector<int> &nums, int low, int high){
+        vector<int> dp(high+1, 0);
+        if(0<low)  dp[low-1] = 0;
+        dp[low] = nums[low];
+        dp[low+1] = max(nums[low], nums[low+1]);
+        for(int i=low+2; i<=high; i++){
+            dp[i] = max(dp[i-2]+nums[i], dp[i-1]);
+        }
+        return dp[high];
+    }
+};
