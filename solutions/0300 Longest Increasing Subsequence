@@ -1,0 +1,41 @@
+// method 1: dp
+// time: O(n^2).
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size(), maxLen = 1;
+        vector<int> dp(n, 1);                                         // dp[j]: maxLen of LIS which ends with [j] in nums[0, j].
+        for(int j=1; j<n; j++){
+            for(int i=0; i<j; i++){
+                if(nums[i]<nums[j]) dp[j] = max(dp[j], 1+ dp[i]);
+            }
+            maxLen = max(maxLen, dp[j]);
+        }
+        return maxLen;
+    }
+};
+
+// method 1: 
+// time: O(nlogn).
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> res;                                 // maintain a smallest Increasing Subsequence, and return its len.
+        int n = nums.size();
+        for(int i=0; i<n; i++){
+            int index = findIndex(res, nums[i]);
+            if(index==res.size()) res.push_back(nums[i]);
+            else res[index] = nums[i];
+        }
+        return res.size();
+    }
+    int findIndex(vector<int> &res, int num){             // find the index of num which firstly >= num.
+        int i=0, j = res.size(), mid;
+        while(i<j){
+            mid = (i+j)/2;
+            if(res[mid]>=num) j = mid;
+            else i = mid + 1;
+        }
+        return i;
+    }
+};
