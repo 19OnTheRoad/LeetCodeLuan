@@ -15,7 +15,7 @@ public:
     }
 };
 
-// method 1: 
+// method 2: binary search.  1.
 // time: O(nlogn).
 class Solution {
 public:
@@ -37,5 +37,29 @@ public:
             else i = mid + 1;
         }
         return i;
+    }
+};
+
+// method 2: binary search.  2.
+// time: O(nlogn).
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> res(n, 0);
+        int maxLen = 0;
+        for (int num : nums) {
+            int i = 0, j = maxLen;
+            while (i < j) {
+                int mid = (i + j) / 2;
+                if (res[mid] < num)
+                    i = mid + 1;
+                else
+                    j = mid;
+            }
+            res[i] = num;
+            if (i == maxLen)  maxLen++;
+        }
+        return maxLen;
     }
 };
