@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int n = triangle.size();
+        vector<int> res = triangle[n-1];                 // the last row.
+        for(int i=n-2; i>=0; i--){                       // from [n-2] row to [0] row. 
+            for(int j=0; j<=i; j++){
+                res[j] = triangle[i][j] + min(res[j], res[j+1]);
+            }
+        }
+        return res[0];
+    }
+};
