@@ -6,7 +6,8 @@ public:
         dp[0][0] = 1;
         for(int i=1; i<=n; i++){
             for(int j=0; j<=target; j++){
-                if(nums[i-1]<=j) dp[i][j] = dp[i-1][j] + dp[i][j-nums[i-1]];
+                if(nums[i-1]<=j) dp[i][j] = dp[i-1][j] + dp[i][j-nums[i-1]];             // the only difference from 494 Target Sum, is dp[i][j-nums[i-1]], 
+                                                                                         // where 494 is: dp[i-1][j-nums[i-1]], since every num can be used at most once.
                 else dp[i][j] = dp[i-1][j];
             }
         }
