@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<TreeNode*> generateTrees(int n) {
+        return helper(1, n);
+    }
+    vector<TreeNode*> helper(int low, int high){
+        if(low>high) return vector<TreeNode*>(1, NULL);           // a vector which contains only a NULL.
+                                                                  // can't vector<TreeNode*>(NULL), ?????????????
+        vector<TreeNode*> res;
+        for(int i=low; i<=high; i++){
+            vector<TreeNode*> lefts = helper(low, i-1);
+            vector<TreeNode*> rights = helper(i+1, high);
+            for(auto l: lefts){
+                for(auto r: rights){
+                    TreeNode *root = new TreeNode(i);
+                    root->left = l;
+                    root->right = r;
+                    res.push_back(root);
+                }
+            }
+        }
+        return res;
+    }
+};
