@@ -1,0 +1,28 @@
+class Solution {
+public:
+    static bool cmp(vector<int> &a, vector<int> &b){
+        if(a[0] == b[0]) return a[1]>b[1];
+        return a[0] < b[0];
+    }
+    int maxEnvelopes(vector<vector<int>>& envs) {
+        sort(envs.begin(), envs.end(), cmp);
+        vector<int> res;                        // res: the smallest increasing sequences of envs[i][1], in the promise of envs[i][0]s is non-decreasing.
+        int n = envs.size();
+        for(int i=0; i<n; i++){
+            int index = findIndex(res, envs[i][1]);
+            if(index==res.size()) res.push_back(envs[i][1]);
+            else res[index] = envs[i][1];
+        }
+        return res.size();
+    }
+    int findIndex(vector<int> &res, int num){      // find the index of number which firstly >= num.
+        int i=0, j= res.size(), mid;
+        while(i<j){
+            mid= (i+j)/2;
+            if(res[mid]>=num) j = mid;
+            else i = mid+1;
+        }
+        return i;
+    }
+};
+
