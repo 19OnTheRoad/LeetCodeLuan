@@ -4,7 +4,7 @@ public:
         int m = s.size(), n = t.size();
         if(n==0) return 1;
         if(m<n) return 0;
-        vector<vector<unsigned int>> dp(m+1, vector<unsigned int>(n+1, 0));   // dp[i][j]: numbers of distinct subsequences of t[0,j) in s[0, i).
+        vector<vector<unsigned int>> dp(m+1, vector<unsigned int>(n+1, 0));   // dp[i][j]: numbers of distinct subsequences of s[0, i) which equals to t[0,j).
                                                                               // int will overflow, long long will overflow
         dp[0][0] = 1;
         for(int i=1; i<=m; i++) dp[i][0] = 1;
