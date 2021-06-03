@@ -11,7 +11,7 @@ public:
         dp[0][0] = 1;
         for(int i=1; i<=n; i++){
             for(int j=0; j<=target; j++){                                         // j must start from 0. it will be false when starts from 1.
-                if(nums[i-1]<=j) dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]];
+                if(nums[i-1]<=j) dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]];    // two case: 1. use nums[i-1].  2. dont't use nums[i-1]. add the two numbers.
                 else dp[i][j] = dp[i-1][j];
             }
         }
