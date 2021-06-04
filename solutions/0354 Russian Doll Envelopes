@@ -26,3 +26,26 @@ public:
     }
 };
 
+class Solution {
+public:
+    static bool cmp(vector<int> &a, vector<int> &b){
+        if(a[0]==b[0]) return a[1] > b[1];
+        return a[0] < b[0];
+    }
+    int maxEnvelopes(vector<vector<int>>& envs) {
+        int n = envs.size(), maxLen = 0;
+        sort(envs.begin(), envs.end(), cmp);
+        vector<int> res(n, 0);
+        for(int k=0; k<n; k++){
+            int i=0, j=maxLen;
+            while(i<j){
+                int mid = (i+j)/2;
+                if(res[mid]>=envs[k][1]) j = mid;
+                else i = mid + 1;
+            }
+            res[i] = envs[k][1];
+            if(i==maxLen) maxLen++;
+        }
+        return maxLen;
+    }
+};
