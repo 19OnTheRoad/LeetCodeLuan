@@ -1,0 +1,23 @@
+// similar to leetcode 38.count and say.
+
+class Solution {
+public:
+    vector<string> letterCombinations(string s) {
+        vector<string> mp={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        int n = s.size();
+        vector<string> res;
+        if(n==0) return res;
+        res.push_back("");
+        for(char c: s){
+            string str = mp[c-'0'];
+            vector<string> tempRes;
+            for(int i=0; i<res.size(); i++){
+                for(int j=0; j<str.size(); j++){
+                    tempRes.push_back(res[i]+str[j]);
+                }
+            }
+            res = tempRes;
+        }
+        return res;
+    }
+};
