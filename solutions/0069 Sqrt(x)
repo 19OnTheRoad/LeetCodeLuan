@@ -1,0 +1,28 @@
+// method 1: binary search.
+// time: O(logn).
+class Solution {
+public:
+    int mySqrt(int x) {
+        long long j=x, i=1,  mid, m =x;
+        while(i<j){
+            mid = (i+j)/2;
+            if(mid*mid>=m) j = mid;
+            else i = mid + 1;
+        }
+        return i*i>m ? i-1 : i;
+    }
+};
+
+// method 2: newton.  
+// time: O(1).
+class Solution {
+public:
+    int mySqrt(int m) {
+        if(m<2) return m;
+        long long res = m/2;
+        while(res*res>m){
+            res = (m/res+res)/2;
+        }
+        return res;
+    }
+};
