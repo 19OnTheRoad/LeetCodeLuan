@@ -1,0 +1,25 @@
+// it is always true that in Rotated Sorted Array, one of [left, mid-1] [mid+1, right] is sorted.
+// so when [left space] is sorted, and target belongs to [left space], we go into this space.     
+// it is similar to [right space]
+
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int n = nums.size(), i = 0, j = n - 1, mid = 0; // i: low, j: high.
+        while(i<=j){
+            mid = (i+j)/2;
+            if(nums[mid]==target) return mid;
+            else if(nums[mid]<nums[j]){                                        // can't use nums[i]<nums[mid].
+                                                                               // because when i+1==j, -->: i == mid --->: nums[i] == nums[mid], so it doesn't work.
+                                                                               // but when i+1==j, --> mid + 1 == j, it can works.
+                if(nums[mid]<target && target<=nums[j]) i = mid + 1;
+                else j = mid - 1;
+            }else{
+                if(nums[i]<=target && target<nums[mid]) j = mid - 1;
+                else i = mid + 1;
+            }
+        }
+        return -1;
+    }
+};
