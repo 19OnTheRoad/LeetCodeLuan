@@ -1,0 +1,63 @@
+// 1 For each house, find its position between those heaters (thus we need the heaters array to be sorted).
+// 2 Calculate the distances between this house and left heater and right heater, get a MIN value of those two values. Corner cases are there is no left or right heater.*****
+// 3 Get MAX value among distances in step 2. It's the answer.
+
+
+// Time complexity: max(O(nlogn), O(mlogn)) - m is the length of houses, n is the length of heaters.??????????????????????/
+class Solution {
+public:
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        sort(heaters.begin(), heaters.end());
+        int m = houses.size(), n = heaters.size();
+        int res = 0;
+        for(int i = 0; i < m; i++){
+            // Binary search
+            int l = 0, r = n - 1;
+            while(l <= r){
+                int mid = (l + r) / 2;
+                if(heaters[mid] == houses[i]){
+                    l = mid;
+                    r = mid;
+                    break;
+                }
+                else if(heaters[mid] < houses[i])
+                    l = mid + 1;
+                else
+                    r = mid - 1;
+            }
+            double idx = (l + r) / 2.0;
+            int right = (idx > n - 1) ? INT_MAX : heaters[(int)(idx + 0.5)] - houses[i];
+            int left = (idx < 0)? INT_MAX : houses[i] - heaters[(int)idx];
+            res = max(res, min(right, left));
+        }
+        return res;
+    }
+};
+
+
+
+
+
+
+
+// time: O(mlogm) + O(nlogn) + O(m+n).
+class Solution {
+public:
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        sort(houses.begin(), houses.end());
+        sort(heaters.begin(), heaters.end());
+        int m = houses.size(), n = heaters.size();
+        vector<int> r(m, INT_MAX);
+        for(int i=0, j=0; i<m && j<n; ){
+            if(houses[i]<=heaters[j]) {r[i]=heaters[j]-houses[i];i++;}
+            else j++;
+        }
+        for(int i=m-1, j=n-1; i>=0 && j>=0; ){
+            if(houses[i]>=heaters[j]) {r[i]=min(r[i], houses[i]-heaters[j]); i--;}
+            else j--;
+        }
+        int maxR = 0;
+        for(int i: r) maxR = max(maxR, i);
+        return maxR;
+    }
+};
