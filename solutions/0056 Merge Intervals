@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& vals) {
+        int n = vals.size();
+        vector<vector<int>> res;
+        sort(vals.begin(), vals.end());
+        res.push_back(vals[0]);
+        for(int i=1; i<n; i++){
+            if(res.back()[1]<vals[i][0]) res.push_back(vals[i]);
+            else{
+                res.back()[1] = max(res.back()[1], vals[i][1]);
+            }
+        }
+        return res;
+    }
+};
