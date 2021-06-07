@@ -1,0 +1,13 @@
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& mat, int target) {
+        int m = mat.size(), n = mat[0].size();
+        int i = 0, j = m*n;
+        while(i<j){
+            int mid = (i+j)/2;
+            if(mat[mid/n][mid%n] >= target) j = mid;
+            else i = mid + 1;
+        }
+        return i==m*n ? false : mat[i/n][i%n]==target;
+    }
+};
