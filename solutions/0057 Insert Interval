@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& vals, vector<int>& newVal) {
+        sort(vals.begin(), vals.end());
+        int n = vals.size();
+        vector<vector<int>> res;
+        int i = 0;
+        while(i<n && vals[i][1]<newVal[0]) res.push_back(vals[i++]);
+        while(i<n && vals[i][0]<=newVal[1]){
+            newVal[0] = min(newVal[0], vals[i][0]);
+            newVal[1] = max(newVal[1], vals[i][1]);
+            i++;
+        }
+        res.push_back(newVal);
+        while(i<n) res.push_back(vals[i++]);
+        return res;
+    }
+};
