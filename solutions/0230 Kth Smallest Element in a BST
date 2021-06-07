@@ -1,0 +1,23 @@
+
+// iterative inorder traversal.
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        int count = 0;
+        stack<TreeNode*> stk;
+        TreeNode *cur = root;
+        while(cur || !stk.empty()){
+            if(cur){
+                stk.push(cur);
+                cur = cur->left;
+            }else{
+                cur = stk.top();
+                stk.pop();
+                count++;
+                if(count==k) return cur->val;
+                cur = cur->right;
+            }
+        }
+        return 0;
+    }
+};
