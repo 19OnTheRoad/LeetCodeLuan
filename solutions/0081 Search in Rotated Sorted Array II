@@ -1,16 +1,41 @@
 class Solution {
 public:
     bool search(vector<int>& nums, int target) {
-        // for a rotated sorted array, it is true that one of [i, mid) and (mid, j] must be sorted.
-        // it is very clear when list all rotated arrays. strongly recommend doing that. for example: [1, 2, 3, 4, 5, 6, 7].
-        // for rotated repeated sorted array, we just j-- when nums[mid]==nums[j]
-        int n = nums.size(), i = 0, j = n - 1, mid = 0;
+        int n = nums.size(), i = 0, j = n - 1;
         while(i<=j){
-            mid = (i+j)/2;
+            int mid = (i+j)/2;
             if(nums[mid]==target) return true;
             while(nums[mid]==nums[j] && mid!=j) j--;
-            if(nums[mid]>nums[j]){     // [i, mid) is sorted, the other mostly not         // ???????????????
+            if(mid==j){                                           // here we j--, to avoid the scence that: mid==j, which is very tricky for binary search.
+                j--;                  
+                continue;
+            }
+            if(nums[mid]<nums[j]){
+                if(nums[mid]<target && target<=nums[j]) i = mid + 1;
+                else j = mid - 1;
+            }
+            else{
                 if(nums[i]<=target && target<nums[mid]) j = mid - 1;
+                else i = mid + 1;
+            }
+        }
+        return false;
+    }
+};
+
+
+
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        int n = nums.size(), i = 0, j = n - 1;
+        while(i<=j){
+            int mid = (i+j)/2;
+            if(nums[mid]==target) return true;
+            while(nums[mid]==nums[j] && mid<j) j--;
+            if(nums[mid]>nums[j]){     // [i, mid) is sorted, the other mostly not       // here:   must use nums[mid]>nums[j]...very tricky and very subtle.
+                if(nums[i]<=target && target<nums[mid]) j = mid - 1;                     // here:   can't use nums[mid]<nums[j]...
+                                                                                         // example which is wrong: [1 0 1 1 1] 0.  ?????????????????????????????
                 else i = mid + 1;
             }else{                     // (mid, j] is sorted, the other mostly not 
                 if(nums[mid]<target && target<=nums[j]) i = mid + 1;
