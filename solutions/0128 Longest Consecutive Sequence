@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_map<int, int> ump;
+        int maxLen = 0;
+        for(int i: nums){
+            if(ump[i] != 0) continue;
+            int sum = ump[i-1] + 1 + ump[i+1];
+            ump[i-ump[i-1]] = sum;
+            ump[i] = sum;
+            ump[i+ump[i+1]] = sum;
+            maxLen = max(maxLen, sum);
+        }
+        return maxLen;
+    }
+};
