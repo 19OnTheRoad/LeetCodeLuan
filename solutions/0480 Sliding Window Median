@@ -1,0 +1,25 @@
+
+
+
+class Solution {
+public:
+    vector<double> medianSlidingWindow(vector<int>& nums, int k) {
+        multiset<int> mst(nums.begin(), nums.begin() + k);
+        vector<double> res;
+        for (int i=k; ; i++) {
+            
+            //auto mid = mst.begin() + k/2;           // it's illegal to represent like this.
+            auto mid1 = next(mst.begin(), (k-1)/2), mid2 = next(mst.begin(), (k-1)/2+1);
+            
+            if(k&1) res.push_back(*mid1);
+            else res.push_back((double(*mid1) + double(*mid2))/2.0);
+            
+            if (i == nums.size()) break;
+            
+            mst.insert(nums[i]);
+            
+            mst.erase(mst.find(nums[i-k]));   // erase only one number the iter points to.
+        }
+        return res;
+    }
+};
