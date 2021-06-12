@@ -1,7 +1,7 @@
 class Solution {
 public:
     bool canIWin(int m, int T) {
-        if(T<=0) return true;
+        if(T<=0) return true;                    // it can speed a little, when T<=m.
         if(m*(m+1)/2<T) return false;
         unordered_map<int, bool> ump;
         return helper(m, T, 0, ump);
