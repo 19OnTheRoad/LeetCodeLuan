@@ -1,0 +1,20 @@
+// time: O(n^2). space: O(1).
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        while(s[0]==' ') s.erase(0, 1);
+        reverse(s.begin(), s.end());
+        while(s[0]==' ') s.erase(0, 1);           // erase leading and tailing space.
+        int start=0;
+        for(int end=0; end<s.size(); end++){
+            if(s[end]==' '){
+                while(s[end+1]==' ') s.erase(end+1, 1);
+                reverse(s.begin()+start, s.begin()+end);   // reverse each word
+                start = end + 1;
+            }
+        }
+        reverse(s.begin()+start, s.end());
+        return s;
+    }
+};
