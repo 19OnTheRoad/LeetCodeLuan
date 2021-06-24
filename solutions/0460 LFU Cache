@@ -1,0 +1,44 @@
+class LFUCache {
+public:
+    int size, minFreq = 0;
+    unordered_map<int, list<int>> freqKeys;   // <freq, list<key>>
+    unordered_map<int, pair<int, int>> values;   // <key, <value, freq>>
+    unordered_map<int, list<int>::iterator> iters;  // <key, list<key>::iterator>
+    void update(int key){
+        int freq = values[key].second;
+        auto iter = iters[key];
+        freqKeys[freq].erase(iter);
+        freqKeys[freq+1].push_back(key);
+        values[key].second++;
+        iters[key] = --freqKeys[freq+1].end();
+        if(freqKeys[minFreq].empty()) minFreq++;
+    }
+    LFUCache(int capacity) {
+        size = capacity;
+    }
+    
+    int get(int key) {
+        if(!values.count(key)) return -1;
+        update(key);
+        return values[key].first;
+    }
+    
+    void put(int key, int value) {
+        if(!size) return ;
+        if(values.count(key)){
+            update(key);
+            values[key].first = value;
+            return ;
+        }
+        if(values.size() == size){
+            int deleteKey = freqKeys[minFreq].front();
+            freqKeys[minFreq].pop_front();
+            values.erase(deleteKey);
+            iters.erase(deleteKey);
+        }
+        freqKeys[1].push_back(key);
+        values[key] = {value, 1};
+        iters[key] = --freqKeys[1].end();
+        minFreq = 1;
+    }
+};
