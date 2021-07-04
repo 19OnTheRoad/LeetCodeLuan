@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> cnt(n, 0);
+        vector<pair<int, int>> vec(n);
+        for(int i=0; i<n; i++){
+            vec[i] = {nums[i], i};
+        }
+        mergeSortCount(vec, 0, n-1, cnt);
+        return cnt;
+    }
+    void mergeSortCount(vector<pair<int, int>> &vec, int low, int high, vector<int> &cnt){
+        if(low>=high) return ;
+        int mid = (low+high)/2;
+        mergeSortCount(vec, low, mid, cnt);
+        mergeSortCount(vec, mid+1, high, cnt);
+        vector<pair<int, int>> temp(high-low+1);
+        int i=low, j=mid+1, k=0;
+        while(i<=mid && j<=high){
+            if(vec[i].first <= vec[j].first){
+                cnt[vec[i].second] += j- (mid+1);
+                temp[k++] = vec[i++];
+            }else{
+                temp[k++] = vec[j++];
+            }
+        }
+        while(i<=mid){
+            cnt[vec[i].second] += j - (mid+1);
+            temp[k++] = vec[i++];
+        }
+        while(j<=high){
+            temp[k++] = vec[j++];
+        }
+        for(k=0, i=low; i<=high; k++, i++){
+            vec[i] = temp[k];
+        }
+    }
+};
