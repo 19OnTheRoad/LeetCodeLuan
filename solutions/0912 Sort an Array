@@ -53,7 +53,7 @@ public:
     }
 };
 
-// method 3: mergeSort.
+// method 3.1: mergeSort.
 // time: O(nlogn).
 class Solution {
 public:
@@ -80,3 +80,14 @@ public:
         }
     }
 };
+
+// method 3.2: mergeSort.  // we can stop copy nums to temp when only leave j. and copy temp to nums with begining with --j.
+// time: O(nlogn).
+
+     //   while(j<=high) temp[k++] = nums[j++];
+     //   for(i = low, k = 0; i<=high; i++, k++){
+     //       nums[i] = temp[k];
+     //   }
+	while(j>low){
+	    nums[--j] = temp[--k];
+	}
