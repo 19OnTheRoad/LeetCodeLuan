@@ -1,0 +1,16 @@
+# it is absolutely same as 1011.
+class Solution:
+    def splitArray(self, nums: List[int], m: int) -> int:
+        i, j = max(nums), sum(nums)
+        while i<j:
+            mid = (i+j)//2
+            tempSum, count = 0, 1
+            for num in nums:
+                if tempSum + num > mid:
+                    tempSum = num
+                    count += 1
+                else: 
+                    tempSum += num
+            if count<=m: j = mid
+            else: i = mid + 1
+        return i
