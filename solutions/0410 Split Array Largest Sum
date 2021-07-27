@@ -14,3 +14,31 @@ class Solution:
             if count<=m: j = mid
             else: i = mid + 1
         return i
+
+
+class Solution {
+public:
+    int splitArray(vector<int>& nums, int k) {
+        int maxNum = INT_MIN, sum = 0;
+        for(int num: nums){
+            maxNum = max(maxNum, num);
+            sum += num;
+        }
+        if(k==1) return sum;
+        int i=maxNum, j = sum;
+        while(i<j){
+            int mid = (i+j)/2;
+            int count = 0, tempSum = 0;
+            for(int num: nums){
+                tempSum += num;
+                if(tempSum>mid){
+                    tempSum = num;
+                    count++;
+                }
+            }
+            if(count<k) j = mid;
+            else i = mid + 1;
+        }
+        return i;
+    }
+};
