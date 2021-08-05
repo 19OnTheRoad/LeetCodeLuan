@@ -1,16 +1,32 @@
 class Solution {
 public:
     int equalSubstring(string s, string t, int maxCost) {
-        int n = s.size(), i = 0, j = 0, maxLen = 0;
-        while(j < n) {
-            maxCost -= abs(s[j] - t[j]);
-            j++;
-            if (maxCost < 0){
-                maxCost += abs(s[i] - t[i]);
-                i++;
-            }
-            maxLen = max(maxLen, j-i);
+        int n = s.length();
+        vector<int> diff(n, 0);
+        for (int i = 0; i < n; i++) {
+            diff[i] = abs(s[i] - t[i]);
         }
-        return maxLen;   // can return j-i, in this case.
+        int start = 0, end = 0, maxLen = 0, sum = 0;
+        while (end < n) {
+            sum += diff[end];
+            while (sum > maxCost) {
+                sum -= diff[start];
+                start++;
+            }
+            maxLen = max(maxLen, end - start + 1);
+            end++;
+        }
+        return maxLen;
+    }
+};
+class Solution {
+public:
+    int equalSubstring(string s, string t, int maxCost) {
+        int n = s.size(), i = 0, j = 0;
+        for (; j < n; ++j) {
+            if ((maxCost -= abs(s[j] - t[j])) < 0)
+                maxCost += abs(s[i] - t[i++]);
+        }
+        return j - i;
     }
 };
