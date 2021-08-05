@@ -1,0 +1,35 @@
+// o(logn)
+class Solution {
+public:
+   vector<int> findClosestElements(vector<int>& nums, int k, int target) {
+        int i = 0, j = nums.size() - k;   // here: res in [0, n-k]. not [0, n-1].
+        while (i < j) {
+            int mid = (i + j) / 2;
+            // the result: nums[mid] <= target <= nums[mid+k]
+            // think in terms of midpoint of the two values target > (nums[mid + k] + nums[mid])/2.
+            if (target - nums[mid] <= nums[mid + k] - target)  j = mid;  // here: nums[mid], nums[mid+k].
+            else  i = mid + 1;
+        }
+        return vector<int>(nums.begin() + i, nums.begin() + i + k);
+    }
+};
+// o(n)
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& nums, int k, int target) {
+        int low = 0, high = nums.size() - 1;
+        while (high - low >= k) {
+            if ( abs(nums[low] - target) > abs(nums[high] - target))    low++;
+            else    high--;
+        }
+        return vector<int>(nums.begin()+low, nums.begin()+low+k);
+    }
+};
+class Solution:
+    def findClosestElements(self, nums: List[int], k: int, target: int) -> List[int]:
+        i, j = 0, len(nums)-k
+        while i<j:
+            mid = (i+j)//2
+            if target-nums[mid] <= nums[mid+k]-target: j = mid
+            else: i = mid + 1
+        return nums[i: i+k]
