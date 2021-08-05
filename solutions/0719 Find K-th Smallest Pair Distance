@@ -2,16 +2,33 @@ class Solution {
 public:
     int smallestDistancePair(vector<int>& nums, int k) {
         sort(nums.begin(), nums.end());
-        int n = nums.size(), i = 0, j = nums[n-1] - nums[0];
+        int n = nums.size(), i=0, j = nums[n-1]-nums[0];
         while(i<j){
-            int mid = (i+j)/2, count = 0, left = 0;
-            for(int right=0; right<n; right++){
-                while(nums[right] - nums[left] > mid) left++;
-                count += right - left;
+            int mid=(i+j)/2, count=0;
+            for(int l=0, r=0; r<n; r++){
+                while(nums[r]-nums[l] > mid) l++;
+                count += r - l;   // ?????????????????????????????????????????????????????????????????????????????????????????????
+                				// r-l: {l, r-0}, {l, r-1}, {l, r-2}, ... , {l, l+1}={l, r-(r-l-1)}.
             }
-            if(count >= k) j = mid;
+            if(count>=k) j = mid;
             else i = mid + 1;
         }
         return i;
     }
 };
+class Solution:
+    def smallestDistancePair(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        n = len(nums)
+        i, j = 0, nums[n-1]-nums[0]
+        while i<j:
+            mid = (i+j)//2
+            count = 0
+            l = r= 0
+            while r<n:
+                while nums[r] - nums[l] > mid: l += 1
+                count += r - l
+                r += 1
+            if count>=k: j = mid
+            else: i = mid + 1
+        return i
