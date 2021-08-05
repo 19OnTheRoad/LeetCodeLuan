@@ -1,15 +1,32 @@
+# days个区间内，连续最大和的最小值。 
+
+# 若无days限制，连续区间最大和的最小值。
+# Without considering the limiting days D, if we are to solve, the answer is simply max(a).
+
+# For this example, [1,2,3,4,5,6,7,8,9,10], D = 5
+# assuming the answer is max(a) = 10, disregarding D,
+# we can get the following number of days:
+# [1,2,3,4] [5] [6] [7] [8] [9] [10]
+
+#So by minimizing the cacpacity shipped on a day, we end up with 7 days, 
+# by greedily chosing the packages for a day limited by 10.
+
+# To get to exactly D days and minimize the max sum of any partition, 
+# do binary search in the sum space which is bounded by [max(a), sum(a)]
 class Solution:
     def shipWithinDays(self, nums: List[int], days: int) -> int:
-        i, j = max(nums), sum(nums)
-        while i<j:
-            mid = (i+j)//2
-            tempSum, count = 0, 1
+        i, j = max(nums), sum(nums)   
+        while i < j:
+            mid = (i + j) // 2
+            tempSum, time = 0, 1
             for num in nums:
                 if tempSum + num > mid:
+                    time += 1
                     tempSum = num
-                    count += 1
-                else: 
+                else:
                     tempSum += num
-            if count<=days: j = mid
-            else: i = mid + 1
+            if time <= days:
+                j = mid
+            else:
+                i = mid+1
         return i
