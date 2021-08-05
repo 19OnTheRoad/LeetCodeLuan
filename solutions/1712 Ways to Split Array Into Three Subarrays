@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int waysToSplit(vector<int>& nums) {
+        int n = nums.size(), count = 0;
+        vector<int> sums=nums;
+        for(int i=1; i<n; i++){
+            sums[i] += sums[i-1];
+        }
+        for(int i=0, j=0, k=0; i<n-2; i++){ // [0, i] [i+1, [j, k-1]] [k, n-1]
+            j = max(j, i+1);
+            while(j+1<n && sums[j]<sums[i]*2) j++;   // sums[j]-sums[i] >= sums[i]
+            k = max(k, j);
+            while(k+1<n && sums[k]-sums[i]<=sums[n-1]-sums[k]) k++; // sums[k]-sums[i]<=sums[n-1]-sums[k]
+            count = (count+k-j)%1000000007;
+        }
+        return count;
+    }
+};
