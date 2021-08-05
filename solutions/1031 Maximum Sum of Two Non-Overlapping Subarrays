@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int maxSumTwoNoOverlap(vector<int>& nums, int A, int B) {
+        int n = nums.size();
+        vector<int> sums(n+1, 0);
+        for(int i=0; i<n; i++){
+            sums[i+1] = sums[i] + nums[i];
+        }
+        int maxA = sums[A], maxB = sums[B], maxSum = sums[A+B];
+        for(int i=A+B; i<=n; i++){
+            maxA = max(maxA, sums[i-B]-sums[i-A-B]);
+            maxB = max(maxB, sums[i-A]-sums[i-A-B]);
+            maxSum = max(maxSum, max(maxA+sums[i]-sums[i-B], maxB+sums[i]-sums[i-A]));
+        }
+        return maxSum;
+    }
+};
