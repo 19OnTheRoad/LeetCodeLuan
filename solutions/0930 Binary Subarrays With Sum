@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        int n = nums.size(), count=0;
+        vector<int> sums(n+1, 0);
+        for(int i=0; i<n; i++){
+            sums[i+1] = sums[i] + nums[i];
+        }
+        for(int i1=0, i2=0, j=0; j<=n; j++){
+            if(sums[j]>=goal){
+                while(i1<j && sums[j]-sums[i1]>goal) i1++;
+                while(i2<j && sums[j]-sums[i2]>=goal) i2++;
+                count += i2 - i1;
+            }
+        }
+        return count;
+    }
+};
