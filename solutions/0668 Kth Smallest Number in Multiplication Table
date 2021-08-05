@@ -1,19 +1,15 @@
 class Solution {
 public:
     int findKthNumber(int m, int n, int k) {
-        int i = 1, j = m*n;
-        while(i<j){
-            int mid = i + (j-i)/2;
-            if(isLessThanK(m, n, k, mid)) j = mid;
+        int i = 1 , j = m * n + 1;
+    	while (i < j) {
+    	    int mid = (i+j)/2, count = 0;
+            for(int i=1; i<=m; i++){
+                count += min(mid/i, n);
+            }
+    	    if (count >= k) j = mid;
             else i = mid + 1;
-        }
-        return i;
-    }
-    bool isLessThanK(int m, int n, int k, int target){
-        int count = 0;
-        for(int i=1; i<=m; i++){
-            count += min(target/i, n);
-        }
-        return count>=k;
+    	}
+    	return j;
     }
 };
