@@ -1,17 +1,75 @@
+// O(n^2)
 class Solution {
 public:
     int numSubarraysWithSum(vector<int>& nums, int goal) {
-        int n = nums.size(), count=0;
+        int n = nums.size();
         vector<int> sums(n+1, 0);
         for(int i=0; i<n; i++){
             sums[i+1] = sums[i] + nums[i];
         }
-        for(int i1=0, i2=0, j=0; j<=n; j++){
+        int count = 0;
+        for(int j=n; j>0; j--){
+            for(int i=j-1; i>=0; i--){
+                count += (sums[j] - sums[i]) == goal;
+            }
+        }
+        return count;
+    }
+};
+// O(n)
+class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& nums, int S) {
+        unordered_map<int, int> cnt({{0, 1}});  // cnt[0] = 1
+        int prefixSum = 0, count = 0;
+        for (int num : nums) {
+            prefixSum += num;
+            count += cnt[prefixSum - S];
+            cnt[prefixSum]++;
+        }
+        return count;
+    }
+};
+
+class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        int n = nums.size(), count = 0;
+        vector<int> sums(n+1, 0);
+        for(int i=0; i<n; i++){
+            sums[i+1] = sums[i] + nums[i];
+        }
+        int i1=0, i2=0, j=0;
+        while(j<=n){
             if(sums[j]>=goal){
                 while(i1<j && sums[j]-sums[i1]>goal) i1++;
                 while(i2<j && sums[j]-sums[i2]>=goal) i2++;
-                count += i2 - i1;
+                count += i2 - i1;    
             }
+            j++; 
+        }
+        return count;
+    }
+};
+
+class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        int n = nums.size(), count = 0;
+        int i1 = 0, i2 = 0, j = 0, sum1 = 0, sum2 = 0;
+        while (j < n) {
+            sum1 += nums[j];
+            while (i1 <= j && sum1 > goal) {
+                sum1 -= nums[i1];
+                i1++;
+            }
+            sum2 += nums[j];
+            while (i2 <= j && sum2 >= goal) {
+                sum2 -= nums[i2];
+                i2++;
+            }
+            count += i2 - i1;
+            j++;
         }
         return count;
     }
