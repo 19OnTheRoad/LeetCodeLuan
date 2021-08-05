@@ -30,3 +30,30 @@ class Solution:
             else:
                 i = mid+1
         return i
+
+class Solution {
+public:
+    int shipWithinDays(vector<int>& nums, int days) {
+        int sum = 0, maxNum = INT_MIN;
+        for(int num: nums){
+            sum += num;
+            maxNum = max(maxNum, num);
+        }
+        int i = maxNum, j = sum;
+        while(i<j){
+            int mid = (i+j)/2;
+            int tempSum = 0, time = 1;
+            for(int num: nums){
+                if(tempSum + num > mid){
+                    tempSum = num;
+                    time++;
+                }else{
+                    tempSum += num;
+                }
+            }
+            if(time<=days) j = mid;
+            else i = mid + 1;
+        }
+        return i;
+    }
+};
