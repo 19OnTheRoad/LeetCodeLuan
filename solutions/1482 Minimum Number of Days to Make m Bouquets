@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int minDays(vector<int>& nums, int m, int k) {
+        int n =  nums.size();
+        if(m>n/k) return -1;
+        int minNum = INT_MAX, maxNum = INT_MIN;
+        for(int num: nums){
+            minNum = min(minNum, num);
+            maxNum = max(maxNum, num);
+        }
+        int i = minNum, j = maxNum;
+        while(i<j){
+            int mid = (i+j)/2;
+            int flowers = 0, count = 0;
+            for(int num: nums){
+                if(num <= mid){
+                    flowers++;
+                    if(flowers==k){
+                        flowers = 0;
+                        count++;
+                    }
+                }else{
+                    flowers = 0;
+                }
+            }
+            if(count >= m) j = mid;
+            else i = mid + 1;
+        }
+        return i;
+    }
+};
+class Solution:
+    def minDays(self, nums: List[int], m: int, k: int) -> int:
+        n = len(nums)
+        if m>n//k: return -1
+        i, j = min(nums), max(nums)
+        while i<j:
+            mid = (i+j)//2
+            count, flowers = 0, 0
+            for num in nums:
+                if num<=mid:
+                    flowers += 1
+                    if flowers == k:
+                        count += 1
+                        if count==m: break
+                        flowers = 0
+                else:
+                    flowers = 0
+            if count>=m: j = mid
+            else: i = mid + 1
+        return i
